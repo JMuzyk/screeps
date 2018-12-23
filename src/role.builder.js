@@ -13,7 +13,6 @@ var roleBuilder = {
             if (Game.constructionSites.length > 0) {
                 const unfinishedBuilding = Game.constructionSites[0];
                 if (creep.build(unfinishedBuilding) === ERR_NOT_IN_RANGE) {
-                    creep.say('Building');
                     creep.moveTo(unfinishedBuilding, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             } else {
@@ -23,7 +22,6 @@ var roleBuilder = {
                 if (structuresToRepair.length > 0) {
                     const structureToRepair = structuresToRepair[0];
                     if (creep.repair(structureToRepair) === ERR_NOT_IN_RANGE) {
-                        creep.say('Repairing');
                         creep.moveTo(structureToRepair, {visualizePathStyle: {stroke: '#ffffff'}});
                     }
                 }

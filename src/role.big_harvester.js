@@ -1,4 +1,4 @@
-var roleBigHarvester = {
+const roleBigHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {

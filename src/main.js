@@ -45,8 +45,8 @@ module.exports.loop = function () {
         } else if (lightFighters.length < LIGHT_FIGHTERS_NEEDED) {
             const newName = 'LightFighter' + Game.time;
             console.log('Spawning new light fighter: ' + newName);
-            Game.spawns['Krakow'].spawnCreep(LIGHT_FIGHTER_BODY_PARTS, newName,
-                {memory: {role: 'light_fighter'}});
+            console.log(Game.spawns['Krakow'].spawnCreep(LIGHT_FIGHTER_BODY_PARTS, newName,
+                {memory: {role: 'light_fighter'}}));
         }
 
     }

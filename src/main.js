@@ -1,12 +1,15 @@
-var roleHarvester = require('role.harvester');
-var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
+const roleHarvester = require('role.harvester');
+const roleUpgrader = require('role.upgrader');
+const roleBuilder = require('role.builder');
 
 module.exports.loop = function () {
 
     const BUILDERS_NEEDED = 1;
     const HARVESTERS_NEEDED = 3;
     const UPGRADERS_NEEDED = 3;
+    const BIG_HARVESTERS_NEEDED = 1;
+
+    const BIG_HARVESTER_BODY_PARTS = [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE];
 
     for (let name in Memory.creeps) {
         if (!Game.creeps[name]) {
@@ -16,9 +19,9 @@ module.exports.loop = function () {
     }
 
     if (!Game.spawns['Krakow'].spawning) {
-        var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
-        var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
-        var builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
+        const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
+        const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
+        const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
 
         if (harvesters.length < HARVESTERS_NEEDED) {
             const newName = 'Harvester' + Game.time;

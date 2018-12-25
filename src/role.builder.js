@@ -10,8 +10,9 @@ var roleBuilder = {
         }
 
         if (creep.memory.building) {
-            if (Game.constructionSites.length > 0) {
-                const unfinishedBuilding = Game.constructionSites[0];
+            const constructionSitesIds = Object.getOwnPropertyNames(Game.constructionSites);
+            if (constructionSitesIds.length > 0) {
+                const unfinishedBuilding = Game.constructionSites['\'' + constructionSitesIds[0] + '\''];
                 if (creep.build(unfinishedBuilding) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(unfinishedBuilding, {visualizePathStyle: {stroke: '#ffffff'}});
                 }

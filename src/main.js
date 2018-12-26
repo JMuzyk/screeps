@@ -42,7 +42,8 @@ module.exports.loop = function () {
             console.log('Spawning new builder: ' + newName);
             Game.spawns['Krakow'].spawnCreep([WORK, CARRY, MOVE], newName,
                 {memory: {role: 'builder'}});
-        } else if (lightFighters.length < LIGHT_FIGHTERS_NEEDED) {
+        } else if (bodyCost(LIGHT_FIGHTER_BODY_PARTS) >= Game.spawns['Krakow'].room.energyAvailable
+            && lightFighters.length < LIGHT_FIGHTERS_NEEDED) {
             const newName = 'LightFighter' + Game.time;
             console.log('Spawning new light fighter: ' + newName);
             console.log(Game.spawns['Krakow'].spawnCreep(LIGHT_FIGHTER_BODY_PARTS, newName,
@@ -66,5 +67,11 @@ module.exports.loop = function () {
         if (creep.memory.role === 'light_fighter') {
             roleLightFighter.run(creep);
         }
+    }
+
+    function bodyCost (body) {
+        return body.reduce(function (cost, part) {
+            return cost + BODYPART_COST[part];
+        }, 0);
     }
 };

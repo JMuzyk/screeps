@@ -42,7 +42,7 @@ module.exports.loop = function () {
             console.log('Spawning new builder: ' + newName);
             Game.spawns['Krakow'].spawnCreep([WORK, CARRY, MOVE], newName,
                 {memory: {role: 'builder'}});
-        } else if (bodyCost(LIGHT_FIGHTER_BODY_PARTS) >= Game.spawns['Krakow'].room.energyAvailable
+        } else if (Game.spawns['Krakow'].room.energyAvailable >= bodyCost(LIGHT_FIGHTER_BODY_PARTS)
             && lightFighters.length < LIGHT_FIGHTERS_NEEDED) {
             const newName = 'LightFighter' + Game.time;
             console.log('Spawning new light fighter: ' + newName);

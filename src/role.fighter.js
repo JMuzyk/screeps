@@ -1,4 +1,4 @@
-const roleLightFighter = {
+const roleFighter = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -12,4 +12,4 @@ const roleLightFighter = {
     }
 };
 
-module.exports = roleLightFighter;
+module.exports = roleFighter;

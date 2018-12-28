@@ -1,69 +1,37 @@
+const creepsFactory = require('creeps_factory');
 const roleHarvester = require('role.harvester');
 const roleUpgrader = require('role.upgrader');
 const roleBuilder = require('role.builder');
-const roleLightFighter = require('role.light_fighter');
+const roleFighter = require('role.fighter');
 
 const creepsManager = {
     run: function () {
 
-        for (let name in Memory.creeps) {
-            if (!Game.creeps[name]) {
-                delete Memory.creeps[name];
-                console.log('Clearing non-existing creep memory:', name);
-            }
-        }
-
-
-        const BUILDERS_NEEDED = 1;
-        const HARVESTERS_NEEDED = 3;
-        const UPGRADERS_NEEDED = 3;
-        const BIG_HARVESTERS_NEEDED = 1;
-        const LIGHT_FIGHTERS_NEEDED = 2;
-
-        const BIG_HARVESTER_BODY_PARTS = [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE];
-        const LIGHT_FIGHTER_BODY_PARTS = [ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE];
-
+        const BUILDERS_NEEDED = 2;
+        const HARVESTERS_NEEDED = 2;
+        const UPGRADERS_NEEDED = 2;
+        // const BIG_HARVESTERS_NEEDED = 1;
+        const FIGHTERS_NEEDED = 0;
 
         if (!Game.spawns['Krakow'].spawning) {
             const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
             const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
             const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
-            const lightFighters = _.filter(Game.creeps, (creep) => creep.memory.role === 'light_fighter');
+            const fighters = _.filter(Game.creeps, (creep) => creep.memory.role === 'fighter');
 
             if (harvesters.length < HARVESTERS_NEEDED) {
-                const newName = 'Harvester' + Game.time;
-                console.log('Spawning new harvester: ' + newName);
-                Game.spawns['Krakow'].spawnCreep([WORK, CARRY, MOVE], newName,
-                    {memory: {role: 'harvester'}});
+                creepsFactory.createHarvester();
             } else if (upgraders.length < UPGRADERS_NEEDED) {
-                const newName = 'Upgrader' + Game.time;
-                console.log('Spawning new harvester: ' + newName);
-                Game.spawns['Krakow'].spawnCreep([WORK, CARRY, MOVE], newName,
-                    {memory: {role: 'upgrader'}});
+                creepsFactory.createUpdater();
             } else if (builders.length < BUILDERS_NEEDED) {
-                const newName = 'Builder' + Game.time;
-                console.log('Spawning new builder: ' + newName);
-                Game.spawns['Krakow'].spawnCreep([WORK, CARRY, MOVE], newName,
-                    {memory: {role: 'builder'}});
-            } else if (Game.spawns['Krakow'].room.energyAvailable >= bodyCost(LIGHT_FIGHTER_BODY_PARTS)
-                && lightFighters.length < LIGHT_FIGHTERS_NEEDED) {
-                const newName = 'LightFighter' + Game.time;
-                console.log('Spawning new light fighter: ' + newName);
-                console.log(Game.spawns['Krakow'].spawnCreep(LIGHT_FIGHTER_BODY_PARTS, newName,
-                    {memory: {role: 'light_fighter'}}));
+                creepsFactory.createBuilder();
+            } else if (fighters.length < FIGHTERS_NEEDED) {
+               creepsFactory.createFighter();
             }
-
-        }
-
-
-        function bodyCost(body) {
-            return body.reduce(function (cost, part) {
-                return cost + BODYPART_COST[part];
-            }, 0);
         }
 
         for (let name in Game.creeps) {
-            var creep = Game.creeps[name];
+            const creep = Game.creeps[name];
             if (creep.memory.role === 'harvester') {
                 roleHarvester.run(creep);
             }
@@ -73,8 +41,8 @@ const creepsManager = {
             if (creep.memory.role === 'builder') {
                 roleBuilder.run(creep);
             }
-            if (creep.memory.role === 'light_fighter') {
-                roleLightFighter.run(creep);
+            if (creep.memory.role === 'fighter') {
+                roleFighter.run(creep);
             }
         }
     }

@@ -1,4 +1,4 @@
-const creepsManager = requre('creeps_manager');
+const creepsManager = require('creeps_manager');
 
 module.exports.loop = function () {
 

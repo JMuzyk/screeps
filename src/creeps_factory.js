@@ -1,7 +1,7 @@
 const spawnName = 'Krakow';
 const BIG_HARVESTER_BODY_PARTS = [WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE];
 const FIGHTER_BODY_PARTS = [ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE];
-const UPGRADER_BODY_PARTS = [WORK, WORK, CARRY, MOVE];
+const UPGRADER_BODY_PARTS = [WORK, CARRY, MOVE] ;
 const HARVESTER_BODY_PARTS = [WORK, CARRY, MOVE];
 const BUILDER_BODY_PARTS = [WORK, WORK, CARRY, MOVE];
 
@@ -42,5 +42,18 @@ function fighterBodyParts() {
     const energyAvailable = Game.spawns[spawnName].room.energyCapacityAvailable;
     let bodyParts = [];
 
+}
 
+function upgraderBodyParts() {
+    const defaultBody = [WORK, CARRY, MOVE];
+    const bodyPartsSegment = [WORK, WORK, WORK, CARRY, MOVE, MOVE];
+    const segmentCost = bodyCost(bodyPartsSegment);
+    const energyAvailable = Game.spawns[spawnName].room.energyCapacityAvailable;
+
+    if(energyAvailable < segmentCost) {
+        return defaultBody;
+    } else {
+        const numberOfSegmentsToBuild = energyAvailable / segmentCost;
+        return [];
+    }
 }

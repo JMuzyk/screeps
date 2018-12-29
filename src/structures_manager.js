@@ -3,11 +3,10 @@ const roleTower = require('role.tower');
 const structuresManager = {
 
     run: function() {
-        const towers = creep.room.find(FIND_MY_STRUCTURES, {
-            filter: (structure) => structure.structureType === STRUCTURE_TOWER
-        });
+        const towers =_.filter(Game.structures, (structure) => structure.structureType === STRUCTURE_TOWER);
 
         for(let tower in towers) {
+            console.log(tower);
             roleTower.run(tower);
         }
     }

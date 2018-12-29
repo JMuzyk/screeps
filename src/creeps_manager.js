@@ -22,7 +22,7 @@ const creepsManager = {
             if (harvesters.length < HARVESTERS_NEEDED) {
                 creepsFactory.createHarvester();
             } else if (upgraders.length < UPGRADERS_NEEDED) {
-                creepsFactory.createUpdater();
+                creepsFactory.createUpgrader();
             } else if (builders.length < BUILDERS_NEEDED) {
                 creepsFactory.createBuilder();
             } else if (fighters.length < FIGHTERS_NEEDED) {

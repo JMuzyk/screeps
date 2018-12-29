@@ -14,10 +14,10 @@ const creepsManager = {
         const FIGHTERS_NEEDED = 0;
 
         if (!Game.spawns['Krakow'].spawning) {
-            const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester');
-            const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader');
-            const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder');
-            const fighters = _.filter(Game.creeps, (creep) => creep.memory.role === 'fighter');
+            const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === 'harvester' && creep.ticksToLive > 50);
+            const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === 'upgrader' && creep.ticksToLive > 50);
+            const builders = _.filter(Game.creeps, (creep) => creep.memory.role === 'builder' && creep.ticksToLive > 50);
+            const fighters = _.filter(Game.creeps, (creep) => creep.memory.role === 'fighter' && creep.ticksToLive > 50);
 
             if (harvesters.length < HARVESTERS_NEEDED) {
                 creepsFactory.createHarvester();

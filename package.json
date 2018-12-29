@@ -1,0 +1,9 @@
+{
+	"name": "kuba-screeps",
+	"scripts": {
+		"test": "ava"
+	},
+	"devDependencies": {
+		"ava": "^1.0.1"
+	}
+}

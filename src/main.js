@@ -1,4 +1,5 @@
 const creepsManager = require('creeps_manager');
+const structuresManager = require('structures_manager');
 
 module.exports.loop = function () {
 
@@ -10,4 +11,5 @@ module.exports.loop = function () {
    }
 
    creepsManager.run();
+   structuresManager.run();
 };

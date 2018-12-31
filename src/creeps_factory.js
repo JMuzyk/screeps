@@ -42,7 +42,7 @@ const creepsFactory = (function () {
         const defaultBody = getDefaultBodies(creepType);
         const bodyPartsSegment = getBodyPartSegments(creepType);
         const segmentCost = bodyCost(bodyPartsSegment);
-        const energyAvailable = Game.spawns[spawnName].room.energyCapacityAvailable;
+        const energyAvailable = Game.spawns[spawnName].room.energyAvailable;
 
         if (energyAvailable < segmentCost) {
             return defaultBody;

@@ -10,7 +10,7 @@ const creepsManager = {
         const BUILDERS_NEEDED = 2;
         const HARVESTERS_NEEDED = 2;
         const UPGRADERS_NEEDED = 2;
-        // const BIG_HARVESTERS_NEEDED = 1;
+        // const MINERS_NEEDED = 1;
         const FIGHTERS_NEEDED = Game.spawns['Krakow'].room.controller.level > 1 ? 3 : 0;
 
         if (!Game.spawns['Krakow'].spawning) {

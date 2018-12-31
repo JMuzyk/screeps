@@ -70,11 +70,11 @@ const creepsFactory = (function () {
     function fighterBodyPartsSortFunction(a, b) {
         const sortOrder = {
             tough: 5,
-            attack: 3,
-            move: 1
+            move: 3,
+            attack: 2
         };
 
-        return sortOrder[a] - sortOrder[b];
+        return sortOrder[b] - sortOrder[a];
     }
 
     function bodyCost(body) {

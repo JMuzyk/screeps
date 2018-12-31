@@ -10,6 +10,11 @@ const roleFighter = {
             if(creep.attack(creepToAttack) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creepToAttack);
             }
+        } else {
+            const towers =_.filter(Game.structures, (structure) => structure.structureType === STRUCTURE_TOWER);
+            if (towers.length > 0) {
+                creep.moveTo(towers[0]);
+            }
         }
     }
 };

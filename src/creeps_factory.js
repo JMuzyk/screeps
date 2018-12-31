@@ -58,21 +58,23 @@ const creepsFactory = (function () {
                     assembledBodyParts = assembledBodyParts.concat(bodyPartsSegment);
                 }
                 if (creepType === CreepType.FIGHTER) {
-                    assembledBodyParts = assembledBodyParts.sort((a, b) => {
-                        const sortOrder = {
-                            TOUGH: 5,
-                            ATTACK: 3,
-                            MOVE: 1
-                        };
-
-                        return sortOrder[a] - sortOrder[b];
-                    });
+                    assembledBodyParts = assembledBodyParts.sort(fighterBodyPartsSortFunction);
                 }
                 return assembledBodyParts;
             } else {
                 return bodyPartsSegment;
             }
         }
+    }
+
+    function fighterBodyPartsSortFunction(a, b) {
+        const sortOrder = {
+            tough: 5,
+            attack: 3,
+            move: 1
+        };
+
+        return sortOrder[a] - sortOrder[b];
     }
 
     function bodyCost(body) {

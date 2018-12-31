@@ -5,14 +5,12 @@ const creepsFactory = (function () {
         obj.BUILDER = 'builder';
         obj.UPGRADER = 'upgrader';
         obj.HARVESTER = 'harvester';
+        obj.FIGHTER = 'fighter';
         Object.freeze(obj);
         return obj;
     })();
 
-
     const spawnName = 'Krakow';
-    const FIGHTER_BODY_PARTS = [ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE];
-
 
     function getDefaultBodies(creepType) {
         if (creepType === CreepType.UPGRADER) {
@@ -23,6 +21,9 @@ const creepsFactory = (function () {
         }
         if (creepType === CreepType.HARVESTER) {
             return [WORK, WORK, CARRY, MOVE];
+        }
+        if (creepType === CreepType.FIGHTER) {
+            return [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE]
         }
     }
 
@@ -35,6 +36,9 @@ const creepsFactory = (function () {
         }
         if (creepType === CreepType.HARVESTER) {
             return [WORK, WORK, WORK, CARRY, MOVE, MOVE];
+        }
+        if (creepType === CreepType.FIGHTER) {
+            return [TOUGH, ATTACK, MOVE];
         }
     }
 
@@ -49,15 +53,28 @@ const creepsFactory = (function () {
         } else {
             const numberOfSegmentsToBuild = parseInt(energyAvailable / segmentCost, 10);
             if (numberOfSegmentsToBuild > 1) {
-                let assemblyBodyParts = [];
+                let assembledBodyParts = [];
                 for (let i = 0; i < numberOfSegmentsToBuild; i++) {
-                    assemblyBodyParts = assemblyBodyParts.concat(bodyPartsSegment);
+                    assembledBodyParts = assembledBodyParts.concat(bodyPartsSegment);
                 }
-                return assemblyBodyParts;
+                if (creepType === CreepType.FIGHTER) {
+                    assembledBodyParts = assembledBodyParts.sort(fighterBodyPartsSortFunction);
+                }
+                return assembledBodyParts;
             } else {
                 return bodyPartsSegment;
             }
         }
+    }
+
+    function fighterBodyPartsSortFunction(a, b) {
+        const sortOrder = {
+            TOUGH: 5,
+            ATTACK: 3,
+            MOVE: 1
+        };
+
+        return sortOrder[a] - sortOrder[b];
     }
 
     function bodyCost(body) {
@@ -66,7 +83,7 @@ const creepsFactory = (function () {
 
     function createCreep(creepType) {
         const newName = creepType + Game.time;
-        console.log('Spawning new ' + creepType + ': '  + newName);
+        console.log('Spawning new ' + creepType + ': ' + newName);
         Game.spawns[spawnName].spawnCreep(assembleBodyParts(creepType), newName, {memory: {role: creepType}});
     }
 
@@ -83,9 +100,7 @@ const creepsFactory = (function () {
     }
 
     function createFighter() {
-        const newName = 'Fighter' + Game.time;
-        console.log('Spawning new fighter: ' + newName);
-        console.log(Game.spawns[spawnName].spawnCreep(FIGHTER_BODY_PARTS, newName, {memory: {role: 'fighter'}}));
+        createCreep(CreepType.FIGHTER);
     }
 
     return {

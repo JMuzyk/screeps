@@ -42,11 +42,21 @@ const creepsFactory = (function () {
         }
     }
 
+    let energyTickCounter = 0;
     function assembleBodyParts(creepType) {
+        const energyAvailable = Game.spawns[spawnName].room.energyAvailable;
+        const energyCapacity= Game.spawns[spawnName].room.energyCapacityAvailable;
+        if(energyAvailable < energyCapacity && energyTickCounter < 100) {
+            energyTickCounter = energyTickCounter + 1;
+            return [];
+        } else {
+            energyTickCounter = 0;
+        }
+
         const defaultBody = getDefaultBodies(creepType);
         const bodyPartsSegment = getBodyPartSegments(creepType);
         const segmentCost = bodyCost(bodyPartsSegment);
-        const energyAvailable = Game.spawns[spawnName].room.energyAvailable;
+
 
         if (energyAvailable < segmentCost) {
             return defaultBody;
@@ -84,7 +94,10 @@ const creepsFactory = (function () {
     function createCreep(creepType) {
         const newName = creepType + Game.time;
         console.log('Spawning new ' + creepType + ': ' + newName);
-        Game.spawns[spawnName].spawnCreep(assembleBodyParts(creepType), newName, {memory: {role: creepType}});
+        const bodyParts = assembleBodyParts(creepType);
+        if(bodyParts.length > 0) {
+            Game.spawns[spawnName].spawnCreep(bodyParts, newName, {memory: {role: creepType}});
+        }
     }
 
     function createUpgrader() {

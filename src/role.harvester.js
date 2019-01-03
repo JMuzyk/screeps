@@ -47,10 +47,14 @@ const roleHarvester = (function () {
         }
     }
 
-    /** @param {Creep} creep **/
+    function isNearEnergySource(creep) {
+        const energySources = creep.room.find(FIND_SOURCES);
+        return creep.pos.isNearTo(energySources[1].pos)
+    }
+
     function run(creep) {
 
-        if (creep.carry.energy > 0) {
+        if (creep.carry.energy > 0 && !isNearEnergySource(creep)) {
             deliverEnergy(creep);
         } else {
             gatherEnergy(creep);

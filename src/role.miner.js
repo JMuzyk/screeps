@@ -1,7 +1,8 @@
-const roleMiner = {
+const roleMiner = (function(){
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
+
+    function run(creep) {
+
         if(creep.carry.energy < creep.carryCapacity) {
             const sources = creep.room.find(FIND_SOURCES);
             if(creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
@@ -9,6 +10,10 @@ const roleMiner = {
             }
         }
     }
-};
+
+    return {
+        run: run
+    }
+})();
 
 module.exports = roleMiner;

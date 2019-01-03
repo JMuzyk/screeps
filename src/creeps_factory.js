@@ -6,6 +6,7 @@ const creepsFactory = (function () {
         obj.UPGRADER = 'upgrader';
         obj.HARVESTER = 'harvester';
         obj.FIGHTER = 'fighter';
+        obj.MINER = 'miner';
         Object.freeze(obj);
         return obj;
     })();
@@ -25,6 +26,9 @@ const creepsFactory = (function () {
         if (creepType === CreepType.FIGHTER) {
             return [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE]
         }
+        if (creepType === CreepType.MINER) {
+            return [WORK, WORK, WORK, WORK, WORK, WORK, MOVE]
+        }
     }
 
     function getBodyPartSegments(creepType) {
@@ -39,6 +43,9 @@ const creepsFactory = (function () {
         }
         if (creepType === CreepType.FIGHTER) {
             return [TOUGH, ATTACK, MOVE];
+        }
+        if (creepType === CreepType.MINER) {
+            return [WORK, WORK, WORK, WORK, WORK, WORK, MOVE]
         }
     }
 
@@ -61,7 +68,8 @@ const creepsFactory = (function () {
         if (energyAvailable < segmentCost) {
             return defaultBody;
         } else {
-            const numberOfSegmentsToBuild = parseInt(energyAvailable / segmentCost, 10);
+            const maxNumberOfSegmentsWeWantToBuild = 5;
+            const numberOfSegmentsToBuild = Math.min(parseInt(energyAvailable / segmentCost, 10), maxNumberOfSegmentsWeWantToBuild);
             if (numberOfSegmentsToBuild > 1) {
                 let assembledBodyParts = [];
                 for (let i = 0; i < numberOfSegmentsToBuild; i++) {
@@ -116,11 +124,16 @@ const creepsFactory = (function () {
         createCreep(CreepType.FIGHTER);
     }
 
+    function createMiner() {
+        createCreep(CreepType.MINER);
+    }
+
     return {
         createUpgrader: createUpgrader,
         createHarvester: createHarvester,
         createBuilder: createBuilder,
-        createFighter: createFighter
+        createFighter: createFighter,
+        createMiner: createMiner
     };
 })();
 

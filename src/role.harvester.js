@@ -54,7 +54,7 @@ const roleHarvester = (function () {
 
     function run(creep) {
 
-        if (creep.carry.energy > 0 && !isNearEnergySource(creep)) {
+        if (creep.carry.energy > 0 && !isNearEnergySource(creep) || creep.carry.energy === creep.carry.energyCapacity) {
             deliverEnergy(creep);
         } else {
             gatherEnergy(creep);

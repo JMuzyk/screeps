@@ -2,7 +2,7 @@ const roleBuilder = (function(){
 
 
     function gatherEnergy(creep) {
-        const containers = creep.room.find(FIND_MY_STRUCTURES, {
+        const containers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return structure.structureType === STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0;
             }

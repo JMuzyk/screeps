@@ -7,7 +7,7 @@ const roleFighter = require('role.fighter');
 const creepsManager = {
     run: function () {
 
-        const BUILDERS_NEEDED = 2;
+        const BUILDERS_NEEDED = 1;
         const HARVESTERS_NEEDED = 2;
         const UPGRADERS_NEEDED = 2;
         const MINERS_NEEDED = 0;

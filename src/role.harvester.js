@@ -36,8 +36,8 @@ const roleHarvester = (function () {
         });
 
         if (containers.length > 0) {
-            if (creep.withdraw(containers[1], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(containers[1]);
+            if (creep.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0]);
             }
         } else {
             const sources = creep.room.find(FIND_SOURCES);

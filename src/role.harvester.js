@@ -24,6 +24,10 @@ const roleHarvester = (function () {
                 if (creep.transfer(closestExtensionWithEnergyNeed, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestExtensionWithEnergyNeed);
                 }
+            } else {
+                if (creep.transfer(Game.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(Game.room.storage);
+                }
             }
         }
     }

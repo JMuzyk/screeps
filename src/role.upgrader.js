@@ -33,8 +33,13 @@ const roleUpgrader = (function () {
         }
     }
 
+    function isNearController(creep) {
+        return creep.pos.inRangeTo(creep.room.controller.pos, 3);
+    }
+
     function run(creep) {
-        if (creep.carry.energy > 0 && !isNearEnergySource(creep) || creep.carry.energy === creep.carryCapacity) {
+        if (creep.carry.energy > 0 && (isNearController(creep) || !isNearEnergySource(creep))
+            || creep.carry.energy === creep.carryCapacity) {
             deliverEnergy(creep);
         } else {
             gatherEnergy(creep);

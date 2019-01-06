@@ -1,27 +1,49 @@
-const roleUpgrader = {
+const roleUpgrader = (function () {
 
-    /** @param {Creep} creep **/
-    run: function(creep) {
-
-        if(creep.memory.fullcheck && creep.carry.energy === 0) {
-            creep.memory.fullcheck = false;
-        }
-        if(!creep.memory.fullcheck && creep.carry.energy === creep.carryCapacity) {
-            creep.memory.fullcheck = true;
-        }
-
-        if(creep.memory.fullcheck) {
-            if(creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller);
+    function gatherEnergy(creep) {
+        // TODO get proper source from memory
+        const source = creep.room.find(FIND_SOURCES)[0];
+        const containers = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType === STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 200
+                    && structure.pos.findClosestByRange(FIND_SOURCES) === source;
             }
-        }
-        else {
-            const sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
+        });
+        if (containers.length > 0) {
+            if (creep.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0]);
+            }
+        } else {
+            if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(source);
             }
         }
     }
-};
+
+    function isNearEnergySource(creep) {
+        // TODO source from memory
+        const energySources = creep.room.find(FIND_SOURCES);
+        return creep.pos.isNearTo(energySources[0].pos)
+    }
+
+
+    function deliverEnergy(creep) {
+        if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(creep.room.controller);
+        }
+    }
+
+    function run(creep) {
+        if (creep.carry.energy > 0 && !isNearEnergySource(creep) || creep.carry.energy === creep.carryCapacity) {
+            deliverEnergy(creep);
+        } else {
+            gatherEnergy(creep);
+        }
+    }
+
+    return {
+        run: run
+    }
+})();
 
 module.exports = roleUpgrader;

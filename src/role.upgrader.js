@@ -54,26 +54,33 @@ const roleUpgrader = (function () {
 
         switch (creep.memory.state) {
             case CreepState.UPGRADING:
-                if (creep.carry.energy > 0) {
-                    deliverEnergy(creep);
-                } else {
+                if (creep.carry.energy === 0) {
                     goToState(creep, CreepState.HARVESTING);
                 }
                 break;
             case CreepState.HARVESTING:
                 const maxEfficientEnergyLimit = creep.carryCapacity - (creep.carryCapacity % creep.body
-                        .filter(body => body.type === WORK)
-                        .map(() => 2)
-                        .reduce((a, b) => a + b, 0));
-                if (creep.carry.energy < maxEfficientEnergyLimit) {
-                    gatherEnergy(creep);
-                } else {
+                    .filter(body => body.type === WORK)
+                    .map(() => 2)
+                    .reduce((a, b) => a + b, 0));
+                if (creep.carry.energy >= maxEfficientEnergyLimit) {
                     goToState(creep, CreepState.UPGRADING);
                 }
                 break;
             default:
                 goToState(creep, CreepState.HARVESTING);
                 break;
+        }
+
+        switch (creep.memory.state) {
+            case CreepState.UPGRADING:
+                deliverEnergy(creep);
+                break;
+            case CreepState.HARVESTING:
+                gatherEnergy(creep);
+                break;
+            default:
+                gatherEnergy(creep);
         }
     }
 

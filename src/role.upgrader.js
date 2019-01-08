@@ -61,7 +61,11 @@ const roleUpgrader = (function () {
                 }
                 break;
             case CreepState.HARVESTING:
-                if (creep.carry.energy < creep.carryCapacity) {
+                const maxEfficientEnergyLimit = creep.carryCapacity - (creep.carryCapacity % creep.body
+                        .filter(body => body.type === WORK)
+                        .map(() => 2)
+                        .reduce((a, b) => a + b, 0));
+                if (creep.carry.energy < maxEfficientEnergyLimit) {
                     gatherEnergy(creep);
                 } else {
                     goToState(creep, CreepState.UPGRADING);

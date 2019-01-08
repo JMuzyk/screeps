@@ -1,5 +1,18 @@
 const roleUpgrader = (function () {
 
+    const CreepState = (function () {
+        const obj = {};
+        obj.IDLE = 'idle';
+        obj.UPGRADING = 'upgrading';
+        obj.HARVESTING = 'harvesting';
+        Object.freeze(obj);
+        return obj;
+    })();
+
+    function goToState(creep, state) {
+        creep.memory.state = state;
+    }
+
     function gatherEnergy(creep) {
         // TODO get proper source from memory
         const source = creep.room.find(FIND_SOURCES)[0];
@@ -38,11 +51,25 @@ const roleUpgrader = (function () {
     }
 
     function run(creep) {
-        if (creep.carry.energy > 0 && (isNearController(creep) || !isNearEnergySource(creep))
-            || creep.carry.energy === creep.carryCapacity) {
-            deliverEnergy(creep);
-        } else {
-            gatherEnergy(creep);
+
+        switch (creep.memory.state) {
+            case CreepState.UPGRADING:
+                if (creep.carry.energy > 0) {
+                    deliverEnergy(creep);
+                } else {
+                    goToState(creep, CreepState.HARVESTING);
+                }
+                break;
+            case CreepState.HARVESTING:
+                if (creep.carry.energy < creep.carryCapacity) {
+                    gatherEnergy(creep);
+                } else {
+                    goToState(creep, CreepState.UPGRADING);
+                }
+                break;
+            default:
+                goToState(creep, CreepState.HARVESTING);
+                break;
         }
     }
 

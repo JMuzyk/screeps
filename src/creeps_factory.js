@@ -68,7 +68,7 @@ const creepsFactory = (function () {
         if (energyAvailable < segmentCost) {
             return defaultBody;
         } else {
-            const maxNumberOfSegmentsWeWantToBuild = 5;
+            const maxNumberOfSegmentsWeWantToBuild = 7;
             const numberOfSegmentsToBuild = Math.min(parseInt(energyAvailable / segmentCost, 10), maxNumberOfSegmentsWeWantToBuild);
             if (numberOfSegmentsToBuild > 1) {
                 let assembledBodyParts = [];

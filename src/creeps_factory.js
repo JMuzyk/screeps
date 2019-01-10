@@ -1,15 +1,6 @@
-const creepsFactory = (function () {
+const CreepType = require('enums').CreepType;
 
-    const CreepType = (function () {
-        const obj = {};
-        obj.BUILDER = 'builder';
-        obj.UPGRADER = 'upgrader';
-        obj.HARVESTER = 'harvester';
-        obj.FIGHTER = 'fighter';
-        obj.MINER = 'miner';
-        Object.freeze(obj);
-        return obj;
-    })();
+const creepsFactory = (function () {
 
     const spawnName = 'Krakow';
 
@@ -24,10 +15,13 @@ const creepsFactory = (function () {
             return [WORK, WORK, CARRY, MOVE];
         }
         if (creepType === CreepType.FIGHTER) {
-            return [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE]
+            return [TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
         }
         if (creepType === CreepType.MINER) {
-            return [WORK, WORK, WORK, WORK, WORK, WORK, MOVE]
+            return [WORK, WORK, WORK, WORK, WORK, WORK, MOVE];
+        }
+        if (creepType === CreepType.MINERAL_HARVESTER) {
+            return [WORK, WORK, CARRY, MOVE];
         }
     }
 
@@ -46,6 +40,9 @@ const creepsFactory = (function () {
         }
         if (creepType === CreepType.MINER) {
             return [WORK, WORK, WORK, WORK, WORK, WORK, MOVE]
+        }
+        if (creepType === CreepType.MINERAL_HARVESTER) {
+            return [WORK, WORK, WORK, CARRY, MOVE, MOVE];
         }
     }
 
@@ -128,12 +125,17 @@ const creepsFactory = (function () {
         createCreep(CreepType.MINER);
     }
 
+    function createMineralHarvester() {
+        createCreep(CreepType.MINERAL_HARVESTER);
+    }
+
     return {
         createUpgrader: createUpgrader,
         createHarvester: createHarvester,
         createBuilder: createBuilder,
         createFighter: createFighter,
-        createMiner: createMiner
+        createMiner: createMiner,
+        createMineralHarvester: createMineralHarvester
     };
 })();
 

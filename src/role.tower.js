@@ -1,6 +1,6 @@
-const roleTower = {
+const roleTower = (function () {
 
-    run: function(tower) {
+    function run(tower) {
         const enemyCreepsToAttack = tower.room.find(FIND_HOSTILE_CREEPS,
             {filter: (enemyCreep) => enemyCreep.pos.inRangeTo(tower.pos, 20)});
 
@@ -9,6 +9,10 @@ const roleTower = {
             tower.attack(creepToAttack);
         }
     }
-};
+
+    return {
+        run: run
+    }
+})();
 
 module.exports = roleTower;

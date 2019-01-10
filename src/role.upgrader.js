@@ -2,7 +2,6 @@ const roleUpgrader = (function () {
 
     const CreepState = (function () {
         const obj = {};
-        obj.IDLE = 'idle';
         obj.UPGRADING = 'upgrading';
         obj.HARVESTING = 'harvesting';
         Object.freeze(obj);

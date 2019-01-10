@@ -52,6 +52,7 @@ const roleHarvester = (function () {
     }
 
     function isNearEnergySource(creep) {
+        // TODO source from memory
         const energySources = creep.room.find(FIND_SOURCES);
         return creep.pos.isNearTo(energySources[1].pos)
     }

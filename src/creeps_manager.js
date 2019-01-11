@@ -7,8 +7,19 @@ const roleMineralHarvester = require('role.mineral_harvester');
 const roleCarrier = require('role.carrier');
 const CreepType = require('enums').CreepType;
 
-const creepsManager = {
-    run: function () {
+const creepsManager = (function(){
+
+
+    function getCarriersNeeded() {
+        if(typeof Game.spawns['Krakow'].room.storage !== 'undefined'
+            && Game.spawns['Krakow'].room.find(FIND_MINERALS)[0].mineralAmount > 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    function run() {
 
         const BUILDERS_NEEDED = 1;
         const HARVESTERS_NEEDED = 2;
@@ -16,7 +27,7 @@ const creepsManager = {
         const MINERS_NEEDED = 0;
         const FIGHTERS_NEEDED = Game.spawns['Krakow'].room.controller.level > 1 ? 3 : 0;
         const MINERAL_HARVESTERS_NEEDED = 1; //TODO change to check for extractors built
-        const CARRIERS_NEEDED = typeof Game.spawns['Krakow'].room.storage !== 'undefined' ? 1 : 0;
+        const CARRIERS_NEEDED = getCarriersNeeded();
 
         if (!Game.spawns['Krakow'].spawning) {
             const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.HARVESTER && creep.ticksToLive > 50);
@@ -65,6 +76,10 @@ const creepsManager = {
             }
         }
     }
-};
+
+    return {
+        run: run
+    }
+})();
 
 module.exports = creepsManager;

@@ -23,6 +23,9 @@ const creepsFactory = (function () {
         if (creepType === CreepType.MINERAL_HARVESTER) {
             return [WORK, WORK, CARRY, MOVE];
         }
+        if (creepType === CreepType.CARRIER) {
+            return [CARRY, CARRY, MOVE];
+        }
     }
 
     function getBodyPartSegments(creepType) {
@@ -43,6 +46,9 @@ const creepsFactory = (function () {
         }
         if (creepType === CreepType.MINERAL_HARVESTER) {
             return [WORK, WORK, WORK, CARRY, MOVE, MOVE];
+        }
+        if (creepType === CreepType.CARRIER) {
+            return [CARRY, CARRY, MOVE];
         }
     }
 
@@ -129,13 +135,18 @@ const creepsFactory = (function () {
         createCreep(CreepType.MINERAL_HARVESTER);
     }
 
+    function createCarrier() {
+        createCreep(CreepType.CARRIER);
+    }
+
     return {
         createUpgrader: createUpgrader,
         createHarvester: createHarvester,
         createBuilder: createBuilder,
         createFighter: createFighter,
         createMiner: createMiner,
-        createMineralHarvester: createMineralHarvester
+        createMineralHarvester: createMineralHarvester,
+        createCarrier: createCarrier
     };
 })();
 

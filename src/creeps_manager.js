@@ -4,6 +4,7 @@ const roleUpgrader = require('role.upgrader');
 const roleBuilder = require('role.builder');
 const roleFighter = require('role.fighter');
 const roleMineralHarvester = require('role.mineral_harvester');
+const roleCarrier = require('role.carrier');
 const CreepType = require('enums').CreepType;
 
 const creepsManager = {
@@ -15,6 +16,7 @@ const creepsManager = {
         const MINERS_NEEDED = 0;
         const FIGHTERS_NEEDED = Game.spawns['Krakow'].room.controller.level > 1 ? 3 : 0;
         const MINERAL_HARVESTERS_NEEDED = 1; //TODO change to check for extractors built
+        const CARRIERS_NEEDED = typeof Game.spawns['Krakow'].room.storage !== 'undefined' ? 1 : 0;
 
         if (!Game.spawns['Krakow'].spawning) {
             const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.HARVESTER && creep.ticksToLive > 50);
@@ -22,6 +24,7 @@ const creepsManager = {
             const builders = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.BUILDER && creep.ticksToLive > 50);
             const fighters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.FIGHTER && creep.ticksToLive > 50);
             const mineral_harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.MINERAL_HARVESTER && creep.ticksToLive > 50);
+            const carriers = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.CARRIER && creep.ticksToLive > 50);
 
             if (harvesters.length < HARVESTERS_NEEDED) {
                 creepsFactory.createHarvester();
@@ -35,6 +38,8 @@ const creepsManager = {
                 creepsFactory.createMiner();
             } else if (mineral_harvesters.length < MINERAL_HARVESTERS_NEEDED) {
                 creepsFactory.createMineralHarvester();
+            } else if (carriers.length < CARRIERS_NEEDED) {
+                creepsFactory.createCarrier();
             }
         }
 
@@ -54,6 +59,9 @@ const creepsManager = {
             }
             if (creep.memory.role === CreepType.MINERAL_HARVESTER) {
                 roleMineralHarvester.run(creep);
+            }
+            if (creep.memory.role === CreepType.CARRIER) {
+                roleCarrier.run(creep);
             }
         }
     }

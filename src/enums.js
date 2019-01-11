@@ -8,6 +8,7 @@ const enums = (function(){
         obj.FIGHTER = 'fighter';
         obj.MINER = 'miner';
         obj.MINERAL_HARVESTER = 'mineral_harvester';
+        obj.CARRIER = 'carrier';
         Object.freeze(obj);
         return obj;
     })();

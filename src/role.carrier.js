@@ -61,7 +61,7 @@ const roleCarrier = (function () {
         creep.memory.state = state;
     }
 
-    function anyStructureRequireEnergy() {
+    function anyStructureRequireEnergy(creep) {
         const spawnsAndTowers = creep.room.find(FIND_MY_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType === STRUCTURE_SPAWN
@@ -78,7 +78,7 @@ const roleCarrier = (function () {
         switch (creep.memory.state) {
             case CreepState.DELIVERING:
                 if (creep.carry.energy === 0) {
-                    if (creep.ticksToLive < 50 || !anyStructureRequireEnergy()) {
+                    if (creep.ticksToLive < 50 || !anyStructureRequireEnergy(creep)) {
                         goToState(creep, CreepState.IDLE);
                     } else {
                         goToState(creep, CreepState.GATHERING);
@@ -91,7 +91,7 @@ const roleCarrier = (function () {
                 }
                 break;
             case CreepState.IDLE:
-                if (anyStructureRequireEnergy()) {
+                if (anyStructureRequireEnergy(creep)) {
                     if (creep.carry.energy === creep.carryCapacity) {
                         goToState(creep, CreepState.DELIVERING);
                     } else {

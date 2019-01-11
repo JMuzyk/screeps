@@ -32,6 +32,10 @@ const roleCarrier = (function(){
                 if (creep.transfer(closestExtensionWithEnergyNeed, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestExtensionWithEnergyNeed);
                 }
+            } else {
+                if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.storage);
+                }
             }
         }
     }

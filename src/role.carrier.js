@@ -91,7 +91,7 @@ const roleCarrier = (function () {
                 }
                 break;
             case CreepState.IDLE:
-                if (anyStructureRequireEnergy(creep)) {
+                if (anyStructureRequireEnergy(creep) && creep.ticksToLive > 50) {
                     if (creep.carry.energy === creep.carryCapacity) {
                         goToState(creep, CreepState.DELIVERING);
                     } else {

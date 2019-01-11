@@ -1,7 +1,8 @@
-const roleCarrier = (function(){
+const roleCarrier = (function () {
 
     const CreepState = (function () {
         const obj = {};
+        obj.IDLE = 'idle';
         obj.DELIVERING = 'delivering';
         obj.GATHERING = 'gathering';
         Object.freeze(obj);
@@ -41,8 +42,16 @@ const roleCarrier = (function(){
     }
 
     function gatherEnergy(creep) {
-        if(creep.room.storage) {
+        if (creep.room.storage) {
             if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.storage);
+            }
+        }
+    }
+
+    function returnEnergyToStorage(creep) {
+        if (creep.carry.energy > 0) {
+            if (creep.transfer(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.storage);
             }
         }
@@ -52,12 +61,28 @@ const roleCarrier = (function(){
         creep.memory.state = state;
     }
 
+    function anyStructureRequireEnergy() {
+        const spawnsAndTowers = creep.room.find(FIND_MY_STRUCTURES, {
+            filter: (structure) => {
+                return (structure.structureType === STRUCTURE_SPAWN
+                    || structure.structureType === STRUCTURE_TOWER
+                    || structure.structureType === STRUCTURE_EXTENSION) && structure.energy < structure.energyCapacity;
+            }
+        });
+
+        return spawnsAndTowers.length > 0;
+    }
+
     function run(creep) {
 
         switch (creep.memory.state) {
             case CreepState.DELIVERING:
                 if (creep.carry.energy === 0) {
-                    goToState(creep, CreepState.GATHERING);
+                    if (creep.ticksToLive < 50 || !anyStructureRequireEnergy()) {
+                        goToState(creep, CreepState.IDLE);
+                    } else {
+                        goToState(creep, CreepState.GATHERING);
+                    }
                 }
                 break;
             case CreepState.GATHERING:
@@ -65,8 +90,17 @@ const roleCarrier = (function(){
                     goToState(creep, CreepState.DELIVERING);
                 }
                 break;
+            case CreepState.IDLE:
+                if (anyStructureRequireEnergy()) {
+                    if (creep.carry.energy === creep.carryCapacity) {
+                        goToState(creep, CreepState.DELIVERING);
+                    } else {
+                        goToState(creep, CreepState.GATHERING);
+                    }
+                }
+                break;
             default:
-                goToState(creep, CreepState.GATHERING);
+                goToState(creep, CreepState.IDLE);
                 break;
         }
 
@@ -77,8 +111,11 @@ const roleCarrier = (function(){
             case CreepState.GATHERING:
                 gatherEnergy(creep);
                 break;
+            case CreepState.IDLE:
+                returnEnergyToStorage(creep);
+                break;
             default:
-                gatherEnergy(creep);
+                returnEnergyToStorage(creep);
         }
 
     }

@@ -2,27 +2,15 @@ const roleMineralHarvester = (function () {
 
     const CreepState = (function () {
         const obj = {};
-        obj.STORING = {
-            updateState: function(creep) {
-                const creepCarry = _.sum(creep.carry);
-                if (creepCarry === 0) {
-                    creep.goToState(CreepState.HARVESTING);
-                }
-            },
-            action: storeMinerals
-        };
-        obj.HARVESTING = {
-            updateState: function(creep) {
-                const creepCarry = _.sum(creep.carry);
-                if (creepCarry >= creep.carryCapacity) {
-                    creep.goToState(CreepState.STORING);
-                }
-            },
-            action: gatherMinerals
-        };
+        obj.STORING = 'storing';
+        obj.HARVESTING = 'harvesting';
         Object.freeze(obj);
         return obj;
     })();
+
+    function goToState(creep, state) {
+        creep.memory.state = state;
+    }
 
     function storeMinerals(creep) {
 
@@ -44,14 +32,35 @@ const roleMineralHarvester = (function () {
     }
 
      function run(creep) {
+         const creepCarry = _.sum(creep.carry);
+         switch (creep.memory.state) {
 
-         if(creep.memory.state) {
-             creep.memory.state.updateState(creep);
-         } else {
-             creep.goToState(CreepState.HARVESTING)
-         }
+            case CreepState.STORING:
+                if (creepCarry === 0) {
+                    goToState(creep, CreepState.HARVESTING);
+                }
+                break;
+            case CreepState.HARVESTING:
 
-        creep.memory.state.action(creep);
+                if (creepCarry >= creep.carryCapacity) {
+                    goToState(creep, CreepState.STORING);
+                }
+                break;
+            default:
+                goToState(creep, CreepState.HARVESTING);
+                break;
+        }
+
+        switch (creep.memory.state) {
+            case CreepState.STORING:
+                storeMinerals(creep);
+                break;
+            case CreepState.HARVESTING:
+                gatherMinerals(creep);
+                break;
+            default:
+                gatherMinerals(creep);
+        }
     }
 
     return {

@@ -8,3 +8,4 @@ const prototypes = (function(){
 })();
 
 
+module.exports = prototypes;

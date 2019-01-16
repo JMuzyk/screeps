@@ -3,7 +3,6 @@ const roleMineralHarvester = (function () {
     const CreepState = (function () {
         const obj = {};
         obj.STORING = {
-            name: 'storing',
             updateState: function(creep) {
                 const creepCarry = _.sum(creep.carry);
                 if (creepCarry === 0) {
@@ -13,7 +12,6 @@ const roleMineralHarvester = (function () {
             action: storeMinerals
         };
         obj.HARVESTING = {
-            name: 'harvesting',
             updateState: function(creep) {
                 const creepCarry = _.sum(creep.carry);
                 if (creepCarry >= creep.carryCapacity) {

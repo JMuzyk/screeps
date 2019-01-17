@@ -13,6 +13,10 @@ const roleBuilder = (function () {
             if (creep.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(containers[0]);
             }
+        } else if (creep.room.storage && creep.room.storage.store[RESOURCE_ENERGY] > 100) {
+            if (creep.withdraw(creep.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.storage);
+            }
         } else {
             if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(source);

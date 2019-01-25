@@ -52,6 +52,30 @@ const creepsFactory = (function () {
         }
     }
 
+    function getMaxNumberOfSegments(creepType) {
+        if (creepType === CreepType.UPGRADER) {
+            return 2;
+        }
+        if (creepType === CreepType.BUILDER) {
+            return 3;
+        }
+        if (creepType === CreepType.HARVESTER) {
+            return 3;
+        }
+        if (creepType === CreepType.FIGHTER) {
+            return 10;
+        }
+        if (creepType === CreepType.MINER) {
+            return 7;
+        }
+        if (creepType === CreepType.MINERAL_HARVESTER) {
+            return 7;
+        }
+        if (creepType === CreepType.CARRIER) {
+            return 7;
+        }
+    }
+
     let energyTickCounter = 0;
     function assembleBodyParts(creepType) {
         const energyAvailable = Game.spawns[spawnName].room.energyAvailable;
@@ -71,8 +95,7 @@ const creepsFactory = (function () {
         if (energyAvailable < segmentCost) {
             return defaultBody;
         } else {
-            const maxNumberOfSegmentsWeWantToBuild = 7;
-            const numberOfSegmentsToBuild = Math.min(parseInt(energyAvailable / segmentCost, 10), maxNumberOfSegmentsWeWantToBuild);
+            const numberOfSegmentsToBuild = Math.min(parseInt(energyAvailable / segmentCost, 10), getMaxNumberOfSegments(creepType));
             if (numberOfSegmentsToBuild > 1) {
                 let assembledBodyParts = [];
                 for (let i = 0; i < numberOfSegmentsToBuild; i++) {

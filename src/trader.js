@@ -1,20 +1,21 @@
 const trader = (function () {
 
     function tradeResource() {
-        for (let room in Game.rooms) {
+        for (let roomName in Game.rooms) {
             const utriumBuyOrders = Game.market.getAllOrders(
                 (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
-                        && Game.market.calcTransactionCost(1000, room, order.roomName) < 1000
+                        && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
                         && order.price > 0.1;
                     });
 
             if(utriumBuyOrders.length > 0) {
                 const order = utriumBuyOrders[0];
-                const resourceStorageInTerminal = Game.rooms[room].terminal.store[RESOURCE_UTRIUM];
+                const resourceStorageInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_UTRIUM];
                 if(resourceStorageInTerminal > 1000) {
-                    Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), room);
-                    console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName)
+                    const transactionCost = Game.market.calcTransactionCost(Math.min(resourceStorageInTerminal, order.amount), roomName, order.roomName);
+                    Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), roomName);
+                    console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName + " at a cost of " + transactionCost + " energy.")
                 }
             }
         }

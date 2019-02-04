@@ -28,13 +28,13 @@ const trader = (function () {
                 (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_ENERGY
                         && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
-                        && order.price > 0.3;
+                        && order.price > 0.5;
                 }).sort(sortByTransactionCost);
 
             if(utriumBuyOrders.length > 0) {
                 // const order = getBestOrder();
                 const order = utriumBuyOrders[0];
-                const energyStorageInTerminalAvailable = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY] - 100000;
+                const energyStorageInTerminalAvailable = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY] - 50000;
                 if(energyStorageInTerminalAvailable > 0) {
                     const transactionCost = Game.market.calcTransactionCost(Math.min(energyStorageInTerminalAvailable, order.amount), roomName, order.roomName);
                     Game.market.deal(order.id, Math.min(energyStorageInTerminalAvailable, order.amount), roomName);

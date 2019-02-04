@@ -32,8 +32,8 @@ const trader = (function () {
                 }).sort(sortByTransactionCost);
 
             if(utriumBuyOrders.length > 0) {
-                const order = getBestOrder();
-                // const order = utriumBuyOrders[0];
+                // const order = getBestOrder();
+                const order = utriumBuyOrders[0];
                 const energyStorageInTerminalAvailable = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY] - 100000;
                 if(energyStorageInTerminalAvailable > 0) {
                     const transactionCost = Game.market.calcTransactionCost(Math.min(energyStorageInTerminalAvailable, order.amount), roomName, order.roomName);

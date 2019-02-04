@@ -6,7 +6,7 @@ const trader = (function () {
                 (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
                         && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
-                        && order.price > 0.1;
+                        && order.price > 0.15;
                     });
 
             if(utriumBuyOrders.length > 0) {

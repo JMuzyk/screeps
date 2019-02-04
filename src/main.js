@@ -1,6 +1,7 @@
 const creepsManager = require('creeps_manager');
 const structuresManager = require('structures_manager');
 const prototypes = require('prototypes');
+const trader = require('trader');
 
 module.exports.loop = function () {
 
@@ -13,4 +14,5 @@ module.exports.loop = function () {
 
    creepsManager.run();
    structuresManager.run();
+   trader.run();
 };

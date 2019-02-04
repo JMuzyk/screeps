@@ -5,7 +5,7 @@ const trader = (function () {
             const utriumBuyOrders = Game.market.getAllOrders({
                 filter: (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
-                        && Game.market.calcTransactionCost(1000, room, order.roomName) < 500;
+                        && Game.market.calcTransactionCost(1000, room, order.roomName) < 5000;
                 }});
 
             console.log(JSON.stringify(utriumBuyOrders));

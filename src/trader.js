@@ -9,16 +9,16 @@ const trader = (function () {
                         && order.price > 0.1;
                     });
 
-            console.log(JSON.stringify(utriumBuyOrders));
+            console.log(JSON.stringify(room));
 
-            if(utriumBuyOrders.length > 0) {
-                const order = utriumBuyOrders[0];
-                const resourceStorageInTerminal = room.terminal.store[RESOURCE_UTRIUM];
-                if(resourceStorageInTerminal > 1000) {
-                    Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), room);
-                    console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName)
-                }
-            }
+            // if(utriumBuyOrders.length > 0) {
+            //     const order = utriumBuyOrders[0];
+            //     const resourceStorageInTerminal = room.terminal.store[RESOURCE_UTRIUM];
+            //     if(resourceStorageInTerminal > 1000) {
+            //         Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), room);
+            //         console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName)
+            //     }
+            // }
         }
     }
 

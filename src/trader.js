@@ -28,7 +28,7 @@ const trader = (function () {
                 (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_ENERGY
                         && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
-                        && order.price > 0.2;
+                        && order.price > 0.3;
                 }).sort(sortByTransactionCost);
 
             if(utriumBuyOrders.length > 0) {

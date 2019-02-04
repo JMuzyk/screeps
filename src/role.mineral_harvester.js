@@ -15,7 +15,7 @@ const roleMineralHarvester = (function () {
     function storeMinerals(creep) {
 
         const resourceToTransfer = Object.keys(creep.carry).filter(key => creep.carry[key] > 0)[0];
-        const terminalStore = _sum(creep.room.terminal.store);
+        const terminalStore = _.sum(creep.room.terminal.store);
         if (creep.room.terminal && terminalStore < 300000) {
             if (creep.transfer(creep.room.terminal, resourceToTransfer) === ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.terminal);

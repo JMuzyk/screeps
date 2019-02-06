@@ -29,10 +29,23 @@ const roleMineralHarvester = (function () {
 
     function gatherMinerals(creep) {
         const mineralSource = creep.room.find(FIND_MINERALS)[0];
-        const extractors = creep.room.find(FIND_STRUCTURES, {filter: (structure) =>  structure.structureType === STRUCTURE_EXTRACTOR});
-        if (extractors.length > 0) {
-            if (creep.harvest(mineralSource) === ERR_NOT_IN_RANGE) {
-                creep.moveTo(mineralSource);
+        const containers = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return structure.structureType === STRUCTURE_CONTAINER && structure.store[mineralSource.mineralType] > 400
+                    && structure.pos.findClosestByRange(FIND_MINERALS) === mineralSource;
+            }
+        });
+
+        if(containers.length > 0) {
+            if (creep.withdraw(containers[0], mineralSource.mineralType) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(containers[0]);
+            }
+        } else {
+            const extractors = creep.room.find(FIND_STRUCTURES, {filter: (structure) =>  structure.structureType === STRUCTURE_EXTRACTOR});
+            if (extractors.length > 0) {
+                if (creep.harvest(mineralSource) === ERR_NOT_IN_RANGE) {
+                    creep.moveTo(mineralSource);
+                }
             }
         }
     }

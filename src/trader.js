@@ -1,12 +1,15 @@
 const trader = (function () {
 
+    const minEnergySellPrice = 0.4;
+    const minUtriumSellPrice = 0.15;
+
     function tradeResource() {
         for (let roomName in Game.rooms) {
             const utriumBuyOrders = Game.market.getAllOrders(
                 (order) => {
                     return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
                         && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
-                        && order.price > 0.15;
+                        && order.price > minUtriumSellPrice;
                     });
 
             if(utriumBuyOrders.length > 0) {
@@ -23,27 +26,38 @@ const trader = (function () {
 
     function tradeEnergy() {
         for (let roomName in Game.rooms) {
-            const sortByTransactionCost = (a, b) => Game.market.calcTransactionCost(1000, roomName, a.roomName) - Game.market.calcTransactionCost(1000, roomName, b.roomName)
-            const utriumBuyOrders = Game.market.getAllOrders(
-                (order) => {
-                    return order.type === ORDER_BUY && order.resourceType === RESOURCE_ENERGY
-                        && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
-                        && order.price > 0.4;
-                }).sort(sortByTransactionCost);
+            if(thereIsEnoughEnergyToTrade(roomName)) {
+                const sortByProfitability = (orderA, orderB) => {
+                    const orderAProfitability = orderA.price / (Game.market.calcTransactionCost(1000, roomName, orderA.roomName) + 1000);
+                    const orderBProfitability = orderB.price / (Game.market.calcTransactionCost(1000, roomName, orderB.roomName) + 1000);
+                    return orderBProfitability - orderAProfitability;
+                };
+                const energyBuyOrders = Game.market.getAllOrders(
+                    (order) => {
+                        return order.type === ORDER_BUY && order.resourceType === RESOURCE_ENERGY
+                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
+                            && order.price > minEnergySellPrice;
+                    }).sort(sortByProfitability);
 
-            if(utriumBuyOrders.length > 0) {
-                // const order = getBestOrder();
-                const order = utriumBuyOrders[0];
-                const energyStorageInTerminalAvailable = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY] - 50000;
-                if(energyStorageInTerminalAvailable > 0) {
-                    const transactionCost = Game.market.calcTransactionCost(Math.min(energyStorageInTerminalAvailable, order.amount), roomName, order.roomName);
-                    Game.market.deal(order.id, Math.min(energyStorageInTerminalAvailable, order.amount), roomName);
-                    console.log("Selling " + Math.min(energyStorageInTerminalAvailable, order.amount) + " energy to " + order.roomName + " at a cost of " + transactionCost + " energy.")
+                if(energyBuyOrders.length > 0) {
+                    // const order = getBestOrder();
+                    const order = energyBuyOrders[0];
+                    const energyStorageInTerminalAvailable = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY] - 50000;
+                    if(energyStorageInTerminalAvailable > 0) {
+                        const transactionCost = Game.market.calcTransactionCost(Math.min(energyStorageInTerminalAvailable, order.amount), roomName, order.roomName);
+                        Game.market.deal(order.id, Math.min(energyStorageInTerminalAvailable, order.amount), roomName);
+                        console.log("Selling " + Math.min(energyStorageInTerminalAvailable, order.amount) + " energy to " + order.roomName + " at a cost of " + transactionCost + " energy.")
+                    }
                 }
             }
         }
     }
 
+    function thereIsEnoughEnergyToTrade(roomName) {
+        const energyInStorage = Game.rooms[roomName].storage.store[RESOURCE_ENERGY];
+        const energyInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY];
+        return energyInStorage + energyInTerminal > 400000;
+    }
 
     function run() {
 

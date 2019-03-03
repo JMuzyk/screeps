@@ -12,7 +12,10 @@ module.exports.loop = function () {
       }
    }
 
-   creepsManager.run();
+   for (let roomName in Game.rooms) {
+      creepsManager.run(Game.rooms[roomName]);
+   }
+
    structuresManager.run();
    trader.run();
 };

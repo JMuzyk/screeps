@@ -26,7 +26,7 @@ const creepsManager = (function(){
         const UPGRADERS_NEEDED = 2;
         const MINERS_NEEDED = 0;
         const FIGHTERS_NEEDED = room.controller.level > 1 ? 3 : 0;
-        const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded();
+        const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded(room);
         const CARRIERS_NEEDED = typeof room.storage !== 'undefined' ? 1 : 0;
 
         if (creepsFactory.isAnySpawnAvailable(room)) {

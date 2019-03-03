@@ -32,21 +32,10 @@ const roleUpgrader = (function () {
         }
     }
 
-    function isNearEnergySource(creep) {
-        // TODO source from memory
-        const energySources = creep.room.find(FIND_SOURCES);
-        return creep.pos.isNearTo(energySources[0].pos)
-    }
-
-
     function deliverEnergy(creep) {
         if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
             creep.moveTo(creep.room.controller);
         }
-    }
-
-    function isNearController(creep) {
-        return creep.pos.inRangeTo(creep.room.controller.pos, 3);
     }
 
     function run(creep) {

@@ -19,11 +19,19 @@ const creepsManager = (function(){
         }
     }
 
+    function getUpgradersNeeded(room) {
+        if(room.controller.level < 8) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
     function run(room) {
 
         const BUILDERS_NEEDED = 1;
         const HARVESTERS_NEEDED = 2;
-        const UPGRADERS_NEEDED = 2;
+        const UPGRADERS_NEEDED = getUpgradersNeeded(room);
         const MINERS_NEEDED = 0;
         const FIGHTERS_NEEDED = room.controller.level > 1 ? 3 : 0;
         const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded(room);

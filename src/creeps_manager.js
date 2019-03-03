@@ -19,7 +19,7 @@ const creepsManager = (function(){
         }
     }
 
-    function run() {
+    function run(room) {
 
         const BUILDERS_NEEDED = 1;
         const HARVESTERS_NEEDED = 2;
@@ -29,7 +29,7 @@ const creepsManager = (function(){
         const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded();
         const CARRIERS_NEEDED = typeof Game.spawns['Krakow'].room.storage !== 'undefined' ? 1 : 0;
 
-        if (!Game.spawns['Krakow'].spawning) {
+        if (creepsFactory.isAnySpawnAvailable(room)) {
             const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.HARVESTER && creep.ticksToLive > 50);
             const upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.UPGRADER && creep.ticksToLive > 50);
             const builders = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.BUILDER && creep.ticksToLive > 50);

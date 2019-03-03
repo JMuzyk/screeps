@@ -4,6 +4,13 @@ const creepsFactory = (function () {
 
     const spawnName = 'Krakow';
 
+    function isAnySpawnAvailable(room) {
+        const idleSpawns = room.find(FIND_MY_SPAWNS, {
+            filter: (spawn) => !spawn.spawning
+        });
+        return idleSpawns > 0;
+    }
+
     function getDefaultBodies(creepType) {
         if (creepType === CreepType.UPGRADER) {
             return [WORK, WORK, CARRY, MOVE];
@@ -163,6 +170,7 @@ const creepsFactory = (function () {
     }
 
     return {
+        isAnySpawnAvailable: isAnySpawnAvailable,
         createUpgrader: createUpgrader,
         createHarvester: createHarvester,
         createBuilder: createBuilder,

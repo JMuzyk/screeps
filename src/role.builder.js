@@ -76,11 +76,11 @@ const roleBuilder = (function () {
             delete creep.memory.structureToRepairId;
             gatherEnergy(creep);
         } else {
-            const constructionSitesIds = Object.getOwnPropertyNames(Game.constructionSites);
-            if (constructionSitesIds.length > 0) {
-                creep.memory.constructionSiteId = constructionSitesIds[0];
-                const constructionSite = Game.constructionSites[creep.memory.constructionSiteId];
-                buildStructure(creep, constructionSite);
+            const constructionSites = creep.room.find(FIND_CONSTRUCTION_SITES);
+            if (constructionSites.length > 0) {
+                const constructionSiteCloseToFinish = constructionSites.sort((a,b) => (a.progressTotal - a.progress) - (b.progressTotal - b.progress))[0];
+                creep.memory.constructionSiteId = constructionSiteCloseToFinish.id;
+                buildStructure(creep, constructionSiteCloseToFinish);
             } else {
                 const structuresToRepair = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => structure.hits / structure.hitsMax < 0.8 && structure.hits < 250000

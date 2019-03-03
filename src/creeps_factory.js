@@ -6,6 +6,8 @@ const creepsFactory = (function () {
         const idleSpawns = room.find(FIND_MY_SPAWNS, {
             filter: (spawn) => !spawn.spawning
         });
+        console.log(idleSpawns);
+        console.log(room.find(FIND_MY_SPAWNS));
         return idleSpawns > 0;
     }
 

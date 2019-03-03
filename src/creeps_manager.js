@@ -27,9 +27,16 @@ const creepsManager = (function(){
         }
     }
 
+    function getBuildersNeeded(room) {
+        if(room.find(FIND_CONSTRUCTION_SITES).length > 2) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
     function run(room) {
 
-        const BUILDERS_NEEDED = 1;
+        const BUILDERS_NEEDED = getBuildersNeeded(room);
         const HARVESTERS_NEEDED = 2;
         const UPGRADERS_NEEDED = getUpgradersNeeded(room);
         const MINERS_NEEDED = 0;

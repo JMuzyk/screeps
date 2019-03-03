@@ -6,6 +6,7 @@ const cacheGenie = (function(){
         }
         if(typeof Memory[room.name].resourceClosestToController === 'undefined') {
             const source = room.controller.pos.findClosestByPath(FIND_SOURCES);
+            console.log(room.controller.pos);
             console.log(source);
             Memory[room.name].resourceClosestToController = source.id;
         }

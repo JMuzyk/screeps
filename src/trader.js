@@ -5,20 +5,22 @@ const trader = (function () {
 
     function tradeResource() {
         for (let roomName in Game.rooms) {
-            const utriumBuyOrders = Game.market.getAllOrders(
-                (order) => {
-                    return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
-                        && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 500
-                        && order.price > minUtriumSellPrice;
+            if(typeof Game.rooms[roomName].terminal !== 'undefined') {
+                const utriumBuyOrders = Game.market.getAllOrders(
+                    (order) => {
+                        return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
+                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 500
+                            && order.price > minUtriumSellPrice;
                     });
 
-            if(utriumBuyOrders.length > 0) {
-                const order = utriumBuyOrders[0];
-                const resourceStorageInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_UTRIUM];
-                if(resourceStorageInTerminal > 1000) {
-                    const transactionCost = Game.market.calcTransactionCost(Math.min(resourceStorageInTerminal, order.amount), roomName, order.roomName);
-                    Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), roomName);
-                    console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName + " at a cost of " + transactionCost + " energy.")
+                if(utriumBuyOrders.length > 0) {
+                    const order = utriumBuyOrders[0];
+                    const resourceStorageInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_UTRIUM];
+                    if(resourceStorageInTerminal > 1000) {
+                        const transactionCost = Game.market.calcTransactionCost(Math.min(resourceStorageInTerminal, order.amount), roomName, order.roomName);
+                        Game.market.deal(order.id, Math.min(resourceStorageInTerminal, order.amount), roomName);
+                        console.log("Selling " + Math.min(resourceStorageInTerminal, order.amount) + " utrium to " + order.roomName + " at a cost of " + transactionCost + " energy.")
+                    }
                 }
             }
         }
@@ -54,8 +56,14 @@ const trader = (function () {
     }
 
     function thereIsEnoughEnergyToTrade(roomName) {
-        const energyInStorage = Game.rooms[roomName].storage.store[RESOURCE_ENERGY];
-        const energyInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY];
+        let energyInStorage = 0;
+        if(typeof Game.rooms[roomName].storage !== 'undefined') {
+            energyInStorage = Game.rooms[roomName].storage.store[RESOURCE_ENERGY];
+        }
+        let energyInTerminal = 0;
+        if(typeof Game.rooms[roomName].terminal !== 'undefined') {
+            energyInTerminal = Game.rooms[roomName].terminal.store[RESOURCE_ENERGY];
+        }
         return energyInStorage + energyInTerminal > 400000;
     }
 

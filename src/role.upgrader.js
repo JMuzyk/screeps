@@ -1,3 +1,5 @@
+const cacheGenie = require('cache_genie');
+
 const roleUpgrader = (function () {
 
     const CreepState = (function () {
@@ -13,8 +15,10 @@ const roleUpgrader = (function () {
     }
 
     function gatherEnergy(creep) {
-        // TODO get proper source from memory
-        const source = creep.room.find(FIND_SOURCES)[0];
+        if(typeof creep.memory.sourceId === 'undefined') {
+            creep.memory.sourceId = cacheGenie.getResourceSourceClosestToController(creep.room);
+        }
+        const source = Game.getObjectById(creep.memory.sourceId);
         const containers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return structure.structureType === STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 200

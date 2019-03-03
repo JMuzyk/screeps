@@ -1,8 +1,11 @@
+const cacheGenie = require('cache_genie');
+
 const roleBuilder = (function () {
 
     function gatherEnergy(creep) {
-        //TODO get proper source from Memory
-        const source = creep.room.find(FIND_SOURCES)[1];
+        const source = creep.room.find(FIND_SOURCES, {
+            filter: (source) => source.id !== cacheGenie.getResourceSourceClosestToController(creep.room)
+        })[0];
         const containers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return structure.structureType === STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0

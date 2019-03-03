@@ -1,3 +1,5 @@
+const cacheGenie = require('cache_genie');
+
 const roleHarvester = (function () {
 
     function deliverEnergy(creep) {
@@ -37,7 +39,9 @@ const roleHarvester = (function () {
     }
 
     function gatherEnergy(creep) {
-        const source = creep.room.find(FIND_SOURCES)[1];
+        const source = creep.room.find(FIND_SOURCES, {
+            filter: (source) => source.id !== cacheGenie.getResourceSourceClosestToController(creep.room)
+        })[0];
         const containers = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return structure.structureType === STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0
@@ -56,9 +60,10 @@ const roleHarvester = (function () {
     }
 
     function isNearEnergySource(creep) {
-        // TODO source from memory
-        const energySources = creep.room.find(FIND_SOURCES);
-        return creep.pos.isNearTo(energySources[1].pos)
+        const source = creep.room.find(FIND_SOURCES, {
+            filter: (source) => source.id !== cacheGenie.getResourceSourceClosestToController(creep.room)
+        })[0];
+        return creep.pos.isNearTo(source.pos)
     }
 
     function run(creep) {

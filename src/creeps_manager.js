@@ -34,13 +34,22 @@ const creepsManager = (function(){
             return 1;
         }
     }
+    
+    function getFightersNeeded(room) {
+        if(room.controller.level > 6) {
+            return 2;
+        } else {
+            return 0;
+        }
+    }
+
     function run(room) {
 
         const BUILDERS_NEEDED = getBuildersNeeded(room);
         const HARVESTERS_NEEDED = 2;
         const UPGRADERS_NEEDED = getUpgradersNeeded(room);
         const MINERS_NEEDED = 0;
-        const FIGHTERS_NEEDED = room.controller.level > 1 ? 3 : 0;
+        const FIGHTERS_NEEDED = getFightersNeeded(room);
         const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded(room);
         const CARRIERS_NEEDED = typeof room.storage !== 'undefined' ? 1 : 0;
 

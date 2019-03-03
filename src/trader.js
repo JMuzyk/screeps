@@ -28,7 +28,7 @@ const trader = (function () {
 
     function tradeEnergy() {
         for (let roomName in Game.rooms) {
-            if(thereIsEnoughEnergyToTrade(roomName)) {
+            if(typeof Game.rooms[roomName].terminal !== 'undefined' && thereIsEnoughEnergyToTrade(roomName)) {
                 const sortByProfitability = (orderA, orderB) => {
                     const orderAProfitability = orderA.price / (Game.market.calcTransactionCost(1000, roomName, orderA.roomName) + 1000);
                     const orderBProfitability = orderB.price / (Game.market.calcTransactionCost(1000, roomName, orderB.roomName) + 1000);

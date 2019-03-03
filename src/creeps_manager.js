@@ -10,9 +10,9 @@ const CreepType = require('enums').CreepType;
 const creepsManager = (function(){
 
 
-    function getMineralHarvestersNeeded() {
-        const extractors = Game.spawns['Krakow'].room.find(FIND_STRUCTURES, {filter: (structure) =>  structure.structureType === STRUCTURE_EXTRACTOR});
-        if(extractors.length > 0 && Game.spawns['Krakow'].room.find(FIND_MINERALS)[0].mineralAmount > 0) {
+    function getMineralHarvestersNeeded(room) {
+        const extractors = room.find(FIND_STRUCTURES, {filter: (structure) =>  structure.structureType === STRUCTURE_EXTRACTOR});
+        if(extractors.length > 0 && room.find(FIND_MINERALS)[0].mineralAmount > 0) {
             return 1;
         } else {
             return 0;
@@ -25,9 +25,9 @@ const creepsManager = (function(){
         const HARVESTERS_NEEDED = 2;
         const UPGRADERS_NEEDED = 2;
         const MINERS_NEEDED = 0;
-        const FIGHTERS_NEEDED = Game.spawns['Krakow'].room.controller.level > 1 ? 3 : 0;
+        const FIGHTERS_NEEDED = room.controller.level > 1 ? 3 : 0;
         const MINERAL_HARVESTERS_NEEDED = getMineralHarvestersNeeded();
-        const CARRIERS_NEEDED = typeof Game.spawns['Krakow'].room.storage !== 'undefined' ? 1 : 0;
+        const CARRIERS_NEEDED = typeof room.storage !== 'undefined' ? 1 : 0;
 
         if (creepsFactory.isAnySpawnAvailable(room)) {
             const harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.HARVESTER && creep.ticksToLive > 50);
@@ -38,19 +38,19 @@ const creepsManager = (function(){
             const carriers = _.filter(Game.creeps, (creep) => creep.memory.role === CreepType.CARRIER && creep.ticksToLive > 50);
 
             if (harvesters.length < HARVESTERS_NEEDED) {
-                creepsFactory.createHarvester();
+                creepsFactory.createHarvester(room);
             } else if (upgraders.length < UPGRADERS_NEEDED) {
-                creepsFactory.createUpgrader();
+                creepsFactory.createUpgrader(room);
             } else if (builders.length < BUILDERS_NEEDED) {
-                creepsFactory.createBuilder();
+                creepsFactory.createBuilder(room);
             } else if (fighters.length < FIGHTERS_NEEDED) {
-               creepsFactory.createFighter();
+               creepsFactory.createFighter(room);
             } else if (fighters.length < MINERS_NEEDED) {
-                creepsFactory.createMiner();
+                creepsFactory.createMiner(room);
             } else if (mineral_harvesters.length < MINERAL_HARVESTERS_NEEDED) {
-                creepsFactory.createMineralHarvester();
+                creepsFactory.createMineralHarvester(room);
             } else if (carriers.length < CARRIERS_NEEDED) {
-                creepsFactory.createCarrier();
+                creepsFactory.createCarrier(room);
             }
         }
 

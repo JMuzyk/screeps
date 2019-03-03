@@ -2,8 +2,6 @@ const CreepType = require('enums').CreepType;
 
 const creepsFactory = (function () {
 
-    const spawnName = 'Krakow';
-
     function isAnySpawnAvailable(room) {
         const idleSpawns = room.find(FIND_MY_SPAWNS, {
             filter: (spawn) => !spawn.spawning
@@ -84,9 +82,9 @@ const creepsFactory = (function () {
     }
 
     let energyTickCounter = 0;
-    function assembleBodyParts(creepType) {
-        const energyAvailable = Game.spawns[spawnName].room.energyAvailable;
-        const energyCapacity= Game.spawns[spawnName].room.energyCapacityAvailable;
+    function assembleBodyParts(creepType, room) {
+        const energyAvailable = room.energyAvailable;
+        const energyCapacity= room.energyCapacityAvailable;
         if(energyAvailable < energyCapacity && energyTickCounter < 100) {
             energyTickCounter = energyTickCounter + 1;
             return [];
@@ -132,41 +130,44 @@ const creepsFactory = (function () {
         return body.reduce((cost, part) => cost + BODYPART_COST[part], 0);
     }
 
-    function createCreep(creepType) {
+    function createCreep(creepType, room) {
         const newName = creepType + Game.time;
         console.log('Spawning new ' + creepType + ': ' + newName);
-        const bodyParts = assembleBodyParts(creepType);
+        const bodyParts = assembleBodyParts(creepType, room);
         if(bodyParts.length > 0) {
-            Game.spawns[spawnName].spawnCreep(bodyParts, newName, {memory: {role: creepType}});
+            const idleSpawn = room.find(FIND_MY_SPAWNS, {
+                filter: (spawn) => !spawn.spawning
+            })[0];
+            idleSpawn.spawnCreep(bodyParts, newName, {memory: {role: creepType}});
         }
     }
 
-    function createUpgrader() {
-        createCreep(CreepType.UPGRADER);
+    function createUpgrader(room) {
+        createCreep(CreepType.UPGRADER, room);
     }
 
-    function createHarvester() {
-        createCreep(CreepType.HARVESTER);
+    function createHarvester(room) {
+        createCreep(CreepType.HARVESTER, room);
     }
 
-    function createBuilder() {
-        createCreep(CreepType.BUILDER);
+    function createBuilder(room) {
+        createCreep(CreepType.BUILDER, room);
     }
 
-    function createFighter() {
-        createCreep(CreepType.FIGHTER);
+    function createFighter(room) {
+        createCreep(CreepType.FIGHTER, room);
     }
 
-    function createMiner() {
-        createCreep(CreepType.MINER);
+    function createMiner(room) {
+        createCreep(CreepType.MINER, room);
     }
 
-    function createMineralHarvester() {
-        createCreep(CreepType.MINERAL_HARVESTER);
+    function createMineralHarvester(room) {
+        createCreep(CreepType.MINERAL_HARVESTER, room);
     }
 
-    function createCarrier() {
-        createCreep(CreepType.CARRIER);
+    function createCarrier(room) {
+        createCreep(CreepType.CARRIER, room);
     }
 
     return {

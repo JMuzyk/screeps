@@ -1,7 +1,7 @@
 const trader = (function () {
 
     const minEnergySellPrice = 0.4;
-    const minUtriumSellPrice = 0.15;
+    const minUtriumSellPrice = 0.1;
 
     function tradeResource() {
         for (let roomName in Game.rooms) {

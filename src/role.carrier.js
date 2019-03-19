@@ -117,7 +117,7 @@ const roleCarrier = (function () {
                 }
                 break;
             case CreepState.GATHERING_MINERALS:
-                if(_.sum(creep.carry = creep.carryCapacity)) {
+                if(_.sum(creep.carry) === creep.carryCapacity) {
                     goToState(creep, CreepState.DELIVERING_MINERALS)
                 }
                 break;

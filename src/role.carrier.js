@@ -103,16 +103,22 @@ const roleCarrier = (function () {
         switch (creep.memory.state) {
             case CreepState.DELIVERING:
                 if (creep.carry.energy === 0) {
-                    if (creep.ticksToLive < 50 || !anyStructureRequireEnergy(creep)) {
-                        goToState(creep, CreepState.IDLE);
-                    } else {
-                        goToState(creep, CreepState.GATHERING);
-                    }
+                    goToState(creep, CreepState.IDLE);
                 }
                 break;
             case CreepState.GATHERING:
                 if (creep.carry.energy === creep.carryCapacity) {
                     goToState(creep, CreepState.DELIVERING);
+                }
+                break;
+            case CreepState.DELIVERING_MINERALS:
+                if (_.sum(creep.carry) === 0) {
+                    goToState(creep, CreepState.IDLE);
+                }
+                break;
+            case CreepState.GATHERING_MINERALS:
+                if(_.sum(creep.carry = creep.carryCapacity) {
+                    goToState(creep, CreepState.DELIVERING_MINERALS)
                 }
                 break;
             case CreepState.IDLE:

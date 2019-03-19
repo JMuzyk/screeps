@@ -5,6 +5,8 @@ const roleCarrier = (function () {
         obj.IDLE = 'idle';
         obj.DELIVERING = 'delivering';
         obj.GATHERING = 'gathering';
+        obj.GATHERING_MINERALS = 'gathering_minerals';
+        obj.DELIVERING_MINERALS = 'delivering_minerals';
         Object.freeze(obj);
         return obj;
     })();
@@ -73,6 +75,29 @@ const roleCarrier = (function () {
         return spawnsAndTowers.length > 0;
     }
 
+    function deliverMinerals(creep) {
+        const mineralType = creep.room.find(FIND_MINERALS)[0].mineralType;
+        if (creep.carry[mineralType] > 0) {
+            if (creep.transfer(creep.room.terminal, mineralType) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.terminal);
+            }
+        }
+    }
+
+    function gatherMinerals(creep) {
+        const mineralType = creep.room.find(FIND_MINERALS)[0].mineralType;
+        if (creep.room.storage) {
+            if (creep.withdraw(creep.room.storage, mineralType) === ERR_NOT_IN_RANGE) {
+                creep.moveTo(creep.room.storage);
+            }
+        }
+    }
+
+    function terminalNeedsResources(creep) {
+        const mineralType = creep.room.find(FIND_MINERALS)[0].mineralType;
+        return typeof creep.room.terminal !== 'undefined' && creep.room.terminal.store[mineralType] < 100000;
+    }
+
     function run(creep) {
 
         switch (creep.memory.state) {
@@ -91,13 +116,22 @@ const roleCarrier = (function () {
                 }
                 break;
             case CreepState.IDLE:
-                if (anyStructureRequireEnergy(creep) && creep.ticksToLive > 50) {
-                    if (creep.carry.energy === creep.carryCapacity) {
-                        goToState(creep, CreepState.DELIVERING);
-                    } else {
-                        goToState(creep, CreepState.GATHERING);
+                if (creep.ticksToLive > 50) {
+                    if (anyStructureRequireEnergy(creep)) {
+                        if (creep.carry.energy === creep.carryCapacity) {
+                            goToState(creep, CreepState.DELIVERING);
+                        } else {
+                            goToState(creep, CreepState.GATHERING);
+                        }
+                    } else if (terminalNeedsResources(creep)) {
+                        if (_.sum(creep.carry) === creep.carryCapacity) {
+                            goToState(creep, CreepState.DELIVERING_MINERALS);
+                        } else {
+                            goToState(creep, CreepState.GATHERING_MINERALS);
+                        }
                     }
                 }
+
                 break;
             default:
                 goToState(creep, CreepState.IDLE);
@@ -110,6 +144,12 @@ const roleCarrier = (function () {
                 break;
             case CreepState.GATHERING:
                 gatherEnergy(creep);
+                break;
+            case CreepState.DELIVERING_MINERALS:
+                deliverMinerals(creep);
+                break;
+            case CreepState.GATHERING_MINERALS:
+                gatherMinerals(creep);
                 break;
             case CreepState.IDLE:
                 returnEnergyToStorage(creep);

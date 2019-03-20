@@ -1,7 +1,9 @@
 const trader = (function () {
 
     const minEnergySellPrice = 0.4;
-    const minUtriumSellPrice = 0.1;
+    const minUtriumSellPrice = 0.09;
+    const maxCostPer1000Energy = 500;
+    const maxCostPer1000Utrium = 700;
 
     function tradeResource() {
         for (let roomName in Game.rooms) {
@@ -9,7 +11,7 @@ const trader = (function () {
                 const utriumBuyOrders = Game.market.getAllOrders(
                     (order) => {
                         return order.type === ORDER_BUY && order.resourceType === RESOURCE_UTRIUM
-                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 500
+                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < maxCostPer1000Utrium
                             && order.price > minUtriumSellPrice;
                     });
 
@@ -37,7 +39,7 @@ const trader = (function () {
                 const energyBuyOrders = Game.market.getAllOrders(
                     (order) => {
                         return order.type === ORDER_BUY && order.resourceType === RESOURCE_ENERGY
-                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < 1000
+                            && Game.market.calcTransactionCost(1000, roomName, order.roomName) < maxCostPer1000Energy
                             && order.price > minEnergySellPrice;
                     }).sort(sortByProfitability);
 
